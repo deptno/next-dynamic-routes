@@ -1,0 +1,53 @@
+{
+  "name": "next-dynamic-routes",
+  "version": "0.1.0",
+  "description": "next@9 serverless(AWS Lambda) dynamic router",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "rm -rf dist && rollup -c && tree dist",
+    "build.test.app": "rm -rf app/.next && next build app",
+    "test": "debug=* tap test/use-express.spec.ts",
+    "testfile": "debug=* tap test/test.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deptno/next-dynamic-routes.git"
+  },
+  "keywords": [
+    "next",
+    "next.js",
+    "slug",
+    "parameterized",
+    "dynamic",
+    "route",
+    "lambda",
+    "serverless"
+  ],
+  "author": "Bonggyun Lee <deptno@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deptno/next-dynamic-routes/issues"
+  },
+  "homepage": "https://github.com/deptno/next-dynamic-routes#readme",
+  "devDependencies": {
+    "@types/debug": "^4.1.4",
+    "@types/express": "^4.17.0",
+    "@types/mime": "^2.0.1",
+    "express": "^4.17.1",
+    "next": "^9.0.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "rollup": "^1.17.0",
+    "rollup-plugin-typescript2": "^0.22.0",
+    "tap": "^14.4.1",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "mime": "^2.4.4"
+  }
+}

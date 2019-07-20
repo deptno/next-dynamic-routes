@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "node",
+    "inlineSourceMap": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "strictNullChecks": true,
+    "declaration": true
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
+}
