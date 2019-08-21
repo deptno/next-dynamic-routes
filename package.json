@@ -1,6 +1,6 @@
 {
   "name": "next-dynamic-routes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "next@9 serverless(AWS Lambda) dynamic router",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

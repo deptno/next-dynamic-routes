@@ -1,63 +1,29 @@
 import {Express} from 'express'
-import {extname, join, resolve} from 'path'
-import {parse} from 'url'
+import {join, resolve} from 'path'
 import debug from 'debug'
 import {toExpressPath} from './convert/to-express-path'
 import {readFileSync} from 'fs'
 
 const log = debug('ndr')
 
-export const withExpress = (app: Express, options: Options = {
-  dir: '.',
-}) => {
-  const target = 'serverless'
-  const {dir} = options
-  const module = {
-    page(path, file) {
-      const pattern = toExpressPath(path)
+export const withExpress = (app: Express, options: Options) => {
+  const {dir = '.', target = 'serverless'} = options || {}
+  const page = (path, file) => {
+    const pattern = toExpressPath(path)
 
-      app.use(pattern, async (req, res) => {
-        log(`> ${req.url} - ${pattern}(${path}), ${file}`)
-        req.query = req.params
+    app.use(pattern, async (req, res) => {
+      log(`> ${req.url} - ${pattern}(${path}), ${file}`)
+      req.query = req.params
 
-        try {
-          await require(file).render(req, res)
-        } catch (e) {
-          console.error('error', file, e)
-          res.status(500).send()
-        }
-      })
+      try {
+        await require(file).render(req, res)
+      } catch (e) {
+        console.error('error', file, e)
+        res.status(500).send()
+      }
+    })
 
-      log('page: ', path, file, pattern)
-    },
-    run(port) {
-      app.use(async (req, res) => {
-        const {page, url, query} = req
-        const parsed = parse(url)
-        const {pathname = ''} = parsed
-        const ext = extname(pathname)
-        const target = resolve(join(dir, page || url))
-
-        if (ext) {
-          return res.sendFile(target, err => res.status(404).send())
-        }
-
-        try {
-          const page = require(target)
-          try {
-            page.render(req, res)
-          } catch (err) {
-            console.error('err', err)
-            res.status(500).send()
-          }
-        } catch (e) {
-          res.status(404).send()
-          console.error(`file not found(${target})`)
-        }
-        log(page, url, query)
-      })
-      return new Promise(resolve => app.listen(port, resolve))
-    }
+    log('page: ', path, file, pattern)
   }
 
   log(`from \`${dir}\``)
@@ -68,7 +34,7 @@ export const withExpress = (app: Express, options: Options = {
   })
 
   extractPagesManifest(join(dir, target, 'pages-manifest.json'))
-    .forEach(([path, file]) => module.page(path, resolve(dir, target, file)))
+    .forEach(([path, file]) => page(path, resolve(dir, target, file)))
 
   return app
 }
@@ -90,4 +56,5 @@ declare global {
 }
 type Options = {
   dir: string
+  target?: 'serverless'|'server'
 }
